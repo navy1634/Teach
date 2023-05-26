@@ -160,5 +160,9 @@ cython_debug/
 #.idea/
 
 
+<<<<<<< HEAD
 desktop.ini
 */desktop.ini
+=======
+./desktop.ini
+>>>>>>> de58e289ca2408ae374368aa495ee4ab17fb7d6a
