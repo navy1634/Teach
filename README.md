@@ -1,16 +1,18 @@
 # Teach
 
-# unit01
+## unit01
 - 標準出力
 - 四則演算
 - 文字列
 
-# unit02
+## unit02
 - 変数
+
+## unit03
 - 比較演算子
 - 条件分岐
 
-# unit03
+## unit04
 - list
-- dict
 - ループ処理
+
