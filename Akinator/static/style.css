@@ -1,0 +1,17 @@
+.select:hover {
+    width: fit-content;
+    width: -moz-fit-content;
+    padding: 15px;
+    margin: 2rem auto;
+    background-color: lightblue;
+    color: darkblue;
+    transition: 0.4s;
+}
+
+.select:hover {
+background-color: white;
+}
+
+.horizon {
+display: flex;
+}

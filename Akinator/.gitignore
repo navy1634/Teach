@@ -1,0 +1,12 @@
+# Folders
+*.csv
+*.ipynb
+*.pdf
+*pyproject.toml
+*.zip
+
+# Files
+*__pycache__/
+*.ipynb_checkpoints
+venv/
+
