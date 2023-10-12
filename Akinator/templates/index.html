@@ -11,7 +11,7 @@
   <body>
     <h1>県大付属中版 アキネーター</h1>
     <div class="horizon">
-      <div class="">
+      <div>
         <p id="question_number">Q1</p>
       </div>
       <img
@@ -20,36 +20,37 @@
         width="172px"
         height="188px"
       />
-      <div class="">
+      <div>
         <p id="question_text">男性ですか?</p>
+        <div>
+          <ul>
+            <li>
+              <a class="select" id="a_yes" onclick="click_select(0)">はい</a>
+            </li>
+            <li>
+              <a class="select" id="a_no" onclick="click_select(1)">いいえ</a>
+            </li>
+            <li>
+              <a class="select" id="a_dont_know" onclick="click_select(2)">
+                分からない
+              </a>
+            </li>
+            <li>
+              <a class="select" id="a_probably" onclick="click_select(3)">
+                たぶんそう部分的にそう
+              </a>
+            </li>
+            <li>
+              <a class="select" id="a_probaly_not" onclick="click_select(4)">
+                たぶん違う そうでもない
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="">
-        <ul>
-          <li>
-            <a class="select" id="a_yes" onclick="click_select(0)">はい</a>
-          </li>
-          <li>
-            <a class="select" id="a_no" onclick="click_select(1)">いいえ</a>
-          </li>
-          <li>
-            <a class="select" id="a_dont_know" onclick="click_select(2)">
-              分からない
-            </a>
-          </li>
-          <li>
-            <a class="select" id="a_probably" onclick="click_select(3)">
-              たぶんそう部分的にそう
-            </a>
-          </li>
-          <li>
-            <a class="select" id="a_probaly_not" onclick="click_select(4)">
-              たぶん違う そうでもない
-            </a>
-          </li>
-        </ul>
-      </div>
-      <button onclick="reset()">リセット</button>
     </div>
+
+    <button onclick="reset()">リセット</button>
   </body>
 </html>
 
@@ -79,15 +80,18 @@
   async function click_select(select_id) {
     const url = base_url + "/request"; // URL
     var json_def = { status: 0, Q: { ans: select_id } }; // 送信用辞書
-    post(url, json_def); // サーバーへ回答を送信
-    get(url); // サーバーから質問を受信
+    const result_status = await post(url, json_def); // サーバーへ回答を送信
+    // if (result_status != 0) {
+    //   return
+    // }
+    await get(url); // サーバーから質問を受信
     // set_question(q_text); // 質問の変更
-    set_image(); // 画像の変更
+    await set_image(); // 画像の変更
   }
 
   // 画面表示系
   q_number = 1;
-  async function set_question(txt) {
+  function set_question(txt) {
     q_number += 1;
     let question_number = document.getElementById("question_number");
     question_number.innerText = `Q${q_number}`; // 第何問目
@@ -96,17 +100,17 @@
   }
 
   // 画像変更
-  function set_image() {
+  async function set_image() {
     var random = Math.floor(Math.random() * 3);
     document.getElementById(
       "image"
     ).src = `static/images/gennbaneko${random}.png`;
   }
 
-  // 読み取り
-  function get(url) {
-    let request = new XMLHttpRequest();
+  let request = new XMLHttpRequest();
 
+  // 読み取り
+  async function get(url) {
     request.onreadystatechange = function () {
       if ((request.readyState == 4) & (request.status == 200)) {
         var obj = JSON.parse(request.responseText);
@@ -120,8 +124,7 @@
   }
 
   // 書き込み
-  function post(url, data) {
-    let request = new XMLHttpRequest();
+  async function post(url, data) {
     request.open("POST", url, true);
     request.setRequestHeader("Content-Type", "application/json"); // ヘッダー情報
     var post_json = JSON.stringify(data);
@@ -129,9 +132,8 @@
   }
 
   // リセット
-  function reset() {
+  async function reset() {
     const url = base_url + "/reset";
-    let request = new XMLHttpRequest();
     request.open("GET", url, true);
     request.send();
     console.log("リセット");
