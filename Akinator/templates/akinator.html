@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Play a Game !</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="static/style.css" /> -->
+    <!-- <script src="main.js"></script> -->
+  </head>
+  <body>
+    <h1>県大付属中版 アキネーター</h1>
+    <div class="horizon">
+      <div>
+        <p id="question_number">Q1</p>
+      </div>
+      <img
+        id="image"
+        src="static/images/gennbaneko0.png"
+        width="172px"
+        height="188px"
+      />
+      <div>
+        <p id="question_text">男性ですか?</p>
+        <div>
+          <ul>
+            <li>
+              <a class="select" id="a_yes" onclick="click_select(0)">はい</a>
+            </li>
+            <li>
+              <a class="select" id="a_no" onclick="click_select(1)">いいえ</a>
+            </li>
+            <li>
+              <a class="select" id="a_dont_know" onclick="click_select(2)">
+                分からない
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <button onclick="reset()">リセット</button>
+  </body>
+</html>
+
+<style>
+  .select:hover {
+    width: fit-content;
+    /* width: -moz-fit-content; */
+    padding: 15px;
+    margin: 2rem auto;
+    background-color: #6faafa;
+    color: #34f55f;
+    transition: 0.4s;
+  }
+  .horizon {
+    display: flex;
+  }
+</style>
+
+<script language="javascript" type="text/javascript">
+  const base_url = "http://127.0.0.1:8000";
+
+  // 選択肢選択時
+  async function click_select(select_id) {
+    const url = base_url + "/request"; // URL
+    var json_def = { status: 0, Q: { ans: select_id } }; // 送信用辞書
+    await post(url, json_def); // サーバーへ回答を送信
+    await get(url); // サーバーから質問を受信
+    await set_image(); // 画像の変更
+  }
+
+  // 画面表示系
+  q_number = 1;
+  function set_question(txt) {
+    q_number += 1;
+    let question_number = document.getElementById("question_number");
+    question_number.innerText = `Q${q_number}`; // 第何問目
+    document.getElementById("question_text").innerText = txt; // 質問文
+    console.log(`setQ-${txt}`);
+  }
+
+  // 画像変更
+  async function set_image() {
+    var random = Math.floor(Math.random() * 3);
+    document.getElementById(
+      "image"
+    ).src = `static/images/gennbaneko${random}.png`;
+  }
+
+  let request = new XMLHttpRequest();
+
+  // 読み取り
+  async function get(url) {
+    request.onreadystatechange = function () {
+      if ((request.readyState == 4) & (request.status == 200)) {
+        var obj = JSON.parse(request.responseText);
+        // console.log(`${obj.question}`)
+        set_question(obj.question);
+        console.log("result_status : ", obj.result_status);
+
+        if (obj.result_status == 1) {
+          window.location.href = '/result';
+        }
+        else if (obj.result_status == 2) {
+          window.location.href = '/result';
+        }
+      }
+    };
+
+    request.open("GET", url, true);
+    request.send();
+  }
+
+  // 書き込み
+  async function post(url, data) {
+    request.open("POST", url, true);
+    request.setRequestHeader("Content-Type", "application/json"); // ヘッダー情報
+    var post_json = JSON.stringify(data);
+    await request.send(post_json);
+  }
+
+  // リセット
+  async function reset() {
+    const url = base_url + "/reset";
+    request.open("GET", url, true);
+    request.send();
+    console.log("リセット");
+  }
+</script>

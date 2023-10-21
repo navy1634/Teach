@@ -3,6 +3,7 @@
 *.ipynb
 *.pdf
 *pyproject.toml
+*.xlsx
 *.zip
 
 # Files
