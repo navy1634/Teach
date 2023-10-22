@@ -1,6 +1,7 @@
 # Folders
 *desktop.ini
 *.pdf
+*.ps1
 *pyproject.toml
 *.zip
 
@@ -10,3 +11,4 @@
 .ruff_cache/
 .venv/
 .vscode/
+sample/*

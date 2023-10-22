@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Play a Game !</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="static/style.css" /> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="static/style.css" />
     <!-- <script src="main.js"></script> -->
   </head>
   <body>
@@ -42,21 +42,6 @@
     <button onclick="reset()">リセット</button>
   </body>
 </html>
-
-<style>
-  .select:hover {
-    width: fit-content;
-    /* width: -moz-fit-content; */
-    padding: 15px;
-    margin: 2rem auto;
-    background-color: #6faafa;
-    color: #34f55f;
-    transition: 0.4s;
-  }
-  .horizon {
-    display: flex;
-  }
-</style>
 
 <script language="javascript" type="text/javascript">
   const base_url = "http://127.0.0.1:8000";
@@ -122,6 +107,7 @@
 
   // リセット
   async function reset() {
+    // リセット用の関数
     const url = base_url + "/reset";
     request.open("GET", url, true);
     request.send();
