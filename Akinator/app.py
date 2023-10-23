@@ -10,23 +10,24 @@ import pandas as pd
 from flask import Flask, render_template, request, session
 from flask_cors import CORS
 
-# Webサーバの初期設定
-app = Flask(__name__)
-cors = CORS(app, supports_credentials=True)
-app.secret_key = "users"  # session の暗号、復号に用いる
-app.permanent_session_lifetime = timedelta(minutes=10)  # session の保存時間
-
 # データの初期設定
 DATA_DIR = os.getcwd() + "/data"
-# 質問情報
+
+# 質問文と選択肢の情報
 with open(DATA_DIR + "/questions.json", "r", encoding="utf-8") as f:
     questions_data_org = json.load(f)
 
 # アンケート結果
 survey_org = pd.read_csv(DATA_DIR + "/Answers.csv", encoding="utf-8")
 
-# 全データの保存先
-users_dict: dict = {}
+# データの保存先
+users_dict = dict()
+
+# Webサーバの初期設定
+app = Flask(__name__)
+cors = CORS(app, supports_credentials=True)
+app.secret_key = "users"  # session の暗号、復号に用いる
+app.permanent_session_lifetime = timedelta(minutes=10)  # session の保存時間
 
 
 @app.route("/")
@@ -42,13 +43,17 @@ def result() -> str:
     df_survey = users_dict[user_id]["survey"]
 
     if session["status"] == 1:  # 対象が特定できた場合
-        print(df_survey["name"].to_list())
-        name = df_survey["name"].to_list()[0]
-        result_sentence = f"あなたは ”{name}” さんですか？"
+        name_list = df_survey["name"].to_list()
+        if len(name_list) == 0:
+            result_sentence = "エラーが起きました"
+        else:
+            name = name_list[0]
+            result_sentence = f"あなたは ”{name}” さんですか？"
+
     elif session["status"] == 2:  # 特定できなかった場合
         result_sentence = "あなたが誰かわかりませんでした……"
     else:
-        raise ValueError
+        result_sentence = "エラーが起きました"
 
     # HTMLの表示
     return render_template("result.html", static_url_path="/static/images", result_sentence=result_sentence)
@@ -181,7 +186,22 @@ def reset() -> dict:
     user_id = session["user_id"]
     users_dict[user_id]["survey"] = survey_org.copy()
     users_dict[user_id]["question"] = questions_data_org.copy()
-    return {"result_status": 0, "question": ""}
+
+    # 一つ目の質問
+    questions = users_dict[user_id]["question"]  # 全質問の情報
+    content = random.choice(list(questions.keys()))
+    statement = questions[content]["statement"]  # 質問文
+    choices = questions[content]["choices"]  # 選択肢
+    choice_target = random.choice(choices)
+
+    # 情報の保存
+    session["content"] = content
+    session["choice_target"] = choice_target
+
+    if "{0}" in statement:
+        statement = statement.format(choice_target)
+
+    return {"result_status": 0, "question": statement}
 
 
 if __name__ == "__main__":
