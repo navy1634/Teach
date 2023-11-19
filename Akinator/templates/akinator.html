@@ -26,7 +26,7 @@
         height="188px"
       />
       <div>
-        <p id="question_text">男性ですか?</p>
+        <p id="question_text">{{ question_statement }}</p>
         <div>
           <ul>
             <li>
@@ -82,8 +82,8 @@
   request.onreadystatechange = function () {
     if ((request.readyState == 4) & (request.status == 200)) {
       var obj = JSON.parse(request.responseText);
-      // console.log(`${obj.question}`)
-      set_question(obj.question);
+      // console.log(`${obj.statement}`)
+      set_question(obj.statement);
       console.log("result_status : ", obj.result_status);
 
       if (obj.result_status == 1) {

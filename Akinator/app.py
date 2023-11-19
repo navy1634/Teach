@@ -4,6 +4,7 @@
 import json
 import os
 import random
+import string
 from datetime import timedelta
 
 import pandas as pd
@@ -15,18 +16,24 @@ DATA_DIR = os.getcwd() + "/data"
 
 # 質問文と選択肢の情報
 with open(DATA_DIR + "/questions.json", "r", encoding="utf-8") as f:
-    questions_data_org = json.load(f)
+    question_data_org = json.load(f)
+
+question_priority_dict = {
+    "essential": ["student_num", "club", "birthday", "living"],
+    "important": ["grade", "class", "subject", "bus", "season", "3tennkai", "learning"],
+    "normal": ["sex", "door", "fishmeet", "blood", "kinotake", "ricebread", "income", "committee", "heyfever", "grasses", "science", "apple", "asmr", "food"],
+}
 
 # アンケート結果
 survey_org = pd.read_csv(DATA_DIR + "/Answers.csv", encoding="utf-8")
 
 # データの保存先
-users_dict = dict()
+all_users_dict = dict()
 
 # Webサーバの初期設定
 app = Flask(__name__)
 cors = CORS(app, supports_credentials=True)
-app.secret_key = "users"  # session の暗号、復号に用いる
+app.secret_key = "".join(random.choices(string.ascii_letters + string.digits, k=24))  # session の暗号、復号に用いる
 app.permanent_session_lifetime = timedelta(minutes=10)  # session の保存時間
 
 
@@ -40,7 +47,7 @@ def root() -> str:
 @app.route("/result")
 def result() -> str:
     user_id = session["user_id"]
-    df_survey = users_dict[user_id]["survey"]
+    df_survey = all_users_dict[user_id]["survey"]
 
     if session["status"] == 1:  # 対象が特定できた場合
         name_list = df_survey["name"].to_list()
@@ -52,6 +59,7 @@ def result() -> str:
 
     elif session["status"] == 2:  # 特定できなかった場合
         result_sentence = "あなたが誰かわかりませんでした……"
+
     else:
         result_sentence = "エラーが起きました"
 
@@ -70,16 +78,20 @@ def main() -> str:
 
     # 初期設定
     # USER_ID を基に管理する
+    user_dict = dict()  # 個人データ保存の辞書
+    user_dict["survey"] = survey_org.copy()  # アンケートデータ
+    user_dict["question_priority"] = question_priority_dict.copy()  # 質問の一覧
+    user_dict["question_data"] = question_data_org.copy()  # 質問文、選択肢のデータ
+
     user_id = session["user_id"]
-    users_dict[user_id] = dict()  # 個人データ保存の辞書
-    users_dict[user_id]["survey"] = survey_org.copy()  # アンケートデータ
-    users_dict[user_id]["question"] = questions_data_org.copy()  # 質問データ
+    all_users_dict[user_id] = user_dict
 
     # 一つ目の質問
-    questions = users_dict[user_id]["question"]  # 全質問の情報
-    content = "sex"  # とりあえず性別から
-    statement = questions[content]["statement"]  # 質問文
-    choices = questions[content]["choices"]  # 選択肢
+    question_priority = all_users_dict[user_id]["question_priority"]  # 全質問の情報
+    question_data = all_users_dict[user_id]["question_data"]
+    content = random.choice(question_priority["normal"])  # 最初の質問
+    statement = question_data[content]["statement"]  # 質問文
+    choices = question_data[content]["choices"]  # 選択肢
     choice_target = random.choice(choices)
 
     # 情報の保存
@@ -90,19 +102,17 @@ def main() -> str:
         statement = statement.format(choice_target)
 
     # HTMLの表示
-    return render_template("akinator.html", static_url_path="/static/images")
+    return render_template("akinator.html", static_url_path="/static/images", question_statement=statement)
 
 
 @app.route("/request", methods=["POST"])
-def post_item():
+def post_item() -> dict:
     user_id = session["user_id"]
-    questions = users_dict[user_id]["question"]
     # print(request.method, session)
 
-    df_survey = users_dict[user_id]["survey"]
+    # 生徒の回答データ
+    df_survey = all_users_dict[user_id]["survey"]
     print("========================================")
-    print("残質問数 : ", len(questions.keys()))
-    print("残質問欄 : ", questions.keys())
     print("候補 : ", len(df_survey))
 
     # 条件の取得
@@ -124,12 +134,8 @@ def post_item():
     else:
         print("その他")
 
-    # 聞いた質問を省く
-    del questions[content]
-
     # 結果の保存
-    users_dict[user_id]["survey"] = df_survey
-    users_dict[user_id]["question"] = questions
+    all_users_dict[user_id]["survey"] = df_survey
 
     return {}
 
@@ -137,11 +143,10 @@ def post_item():
 @app.route("/request", methods=["GET"])
 def get_item() -> dict:
     user_id = session["user_id"]
-    questions = users_dict[user_id]["question"]
     # print(request.method, session)
 
     # 条件判断
-    df_survey = users_dict[user_id]["survey"]
+    df_survey = all_users_dict[user_id]["survey"]
     if len(df_survey) == 0:  # 条件に合う人が居なかった場合
         session_status = 2
         session["status"] = session_status
@@ -155,43 +160,70 @@ def get_item() -> dict:
         print(target_name)
         return {"result_status": session_status}
 
-    else:
-        session_status = 0
-        session["status"] = session_status
+    session_status = 0
+    session["status"] = session_status
 
     # 質問文の選択
-    content = random.choice(list(questions.keys()))
-    print("GET KEYS : ", questions.keys(), content)  # 確認
+    question_data = all_users_dict[user_id]["question_data"]
+    question_priority = all_users_dict[user_id]["question_priority"]  # 全質問の情報
+
+    # 質問の重要性を考える
+    if len(df_survey) > 90:
+        importance = "normal"
+    elif len(df_survey) > 6:
+        importance = "important"
+    else:
+        importance = "essential"
+
+    # 重要性別のリストが空なら多い normal から選ぶ
+    if len(question_priority[importance]) < 1:
+        importance = "normal"
+
+    # 質問対象の選択
+    content = random.choice(question_priority[importance])
+    print("GET KEYS   : ", content, question_priority[importance])  # 確認
+    print("残質問数   : ", len(question_data.keys()))
+    print("残質問一覧 : ", question_data)
+
     # 質問対象の一覧
-    choices = questions[content]["choices"]
+    choices = question_data[content]["choices"]
     # 質問対象の選択
     choice_target = random.choice(choices)
 
     # 質問情報の保存
+    session["importance"] = importance
     session["content"] = content
     session["choice_target"] = choice_target
-    print("Change Content", content)
+    print("Change Content : ", content)
 
     # 質問文の作成
-    statement = questions[content]["statement"]  # 質問文の取得
+    statement = question_data[content]["statement"]  # 質問文の取得
     if "{0}" in statement:
         statement = statement.format(choice_target)
+    print(statement)
 
-    return {"result_status": session_status, "question": statement}
+    # 聞いた質問を省く
+    question_priority[importance].remove(content)
+
+    return {"result_status": session_status, "statement": statement}
 
 
 @app.route("/reset", methods=["GET"])
 def reset() -> dict:
     # 初期化
     user_id = session["user_id"]
-    users_dict[user_id]["survey"] = survey_org.copy()
-    users_dict[user_id]["question"] = questions_data_org.copy()
+    user_dict = all_users_dict[user_id]
+    user_dict["survey"] = survey_org.copy()
+    user_dict["question_priority"] = question_priority_dict.copy()
 
     # 一つ目の質問
-    questions = users_dict[user_id]["question"]  # 全質問の情報
-    content = random.choice(list(questions.keys()))
-    statement = questions[content]["statement"]  # 質問文
-    choices = questions[content]["choices"]  # 選択肢
+    question_priority = user_dict["question_priority"]  # 全質問の情報
+    content = random.choice(question_priority["normal"])
+    print(content)
+
+    question_data = user_dict["question_data"]  # 全質問の情報
+    statement = question_data[content]["statement"]  # 質問文
+    choices = question_data[content]["choices"]  # 選択肢
     choice_target = random.choice(choices)
 
     # 情報の保存
@@ -201,7 +233,7 @@ def reset() -> dict:
     if "{0}" in statement:
         statement = statement.format(choice_target)
 
-    return {"result_status": 0, "question": statement}
+    return {"result_status": 0, "statement": statement}
 
 
 if __name__ == "__main__":

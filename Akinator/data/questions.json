@@ -5,14 +5,14 @@
   },
   "class": {
     "choices": ["1組", "2組"],
-    "statement": "{0}ですか？"
+    "statement": "{0}の生徒ですか？"
   },
-  "attendance_num": {
+  "student_num": {
     "choices": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
     "statement": "出席番号は{0}番ですか？"
   },
   "sex": {
-    "choices": ["女", "男"],
+    "choices": ["男", "女"],
     "statement": "{0}性ですか？"
   },
   "club": {
@@ -21,7 +21,7 @@
   },
   "subject": {
     "choices": ["国語", "数学", "理科", "社会", "英語"],
-    "statement": "最も好きな教科は{0}ですか？"
+    "statement": "主要5教科の内、最も好きな教科は{0}ですか？"
   },
   "door": {
     "choices": ["アウトドア派", "インドア派"],
@@ -33,7 +33,7 @@
   },
   "fishmeet": {
     "choices": ["肉派", "魚派"],
-    "statement": "{0}ですか？"
+    "statement": "肉と魚では、{0}ですか？"
   },
   "blood": {
     "choices": ["朝型", "昼型", "夜型"],
@@ -49,7 +49,7 @@
   },
   "season": {
     "choices": ["春", "夏", "秋", "冬"],
-    "statement": "好きな季節は{0}ですか？"
+    "statement": "最も好きな季節は{0}ですか？"
   },
   "birthday": {
     "choices": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -65,7 +65,7 @@
   },
   "committee": {
     "choices": ["はい", "いいえ"],
-    "statement": "前期に委員会に入っていましたか？"
+    "statement": "2023年度前期に委員会に入っていましたか？"
   },
   "3tennkai": {
     "choices": ["A", "B", "C"],
@@ -85,15 +85,15 @@
   },
   "apple": {
     "choices": ["はい", "いいえ"],
-    "statement": "iphone,ipadなど、apple製品をもっていますか？"
+    "statement": "iphone・ipadなど、apple製品をもっていますか？"
   },
   "learning": {
     "choices": ["どっちも好き", "どっちも嫌い", "勉強", "運動"],
-    "statement": "運動と勉強だと{0}の方が好きですか？"
+    "statement": "運動と勉強では、{0}の方が好きですか？"
   },
   "asmr": {
     "choices": ["はい", "いいえ"],
-    "statement": "ASMRは好きですか？"
+    "statement": "ASMR は好きですか？"
   },
   "food": {
     "choices": ["はい", "いいえ"],
