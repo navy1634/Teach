@@ -2,110 +2,158 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Play a Game !</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="static/css/style.css"
-    />
-    <!-- <script src="main.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/style.css" />
   </head>
   <body>
-    <h1>県大付属中版 アキネーター</h1>
-    <div class="horizon">
-      <div>
-        <p id="question_number">Q1</p>
-      </div>
-      <img
-        id="image"
-        src="static/images/gennbaneko0.png"
-        width="172px"
-        height="188px"
-      />
-      <div>
-        <p id="question_text">{{ question_statement }}</p>
-        <div>
-          <ul>
-            <li>
-              <a class="select" id="a_yes" onclick="click_select(0)">はい</a>
-            </li>
-            <li>
-              <a class="select" id="a_no" onclick="click_select(1)">いいえ</a>
-            </li>
-            <li>
-              <a class="select" id="a_dont_know" onclick="click_select(2)">
-                分からない
-              </a>
-            </li>
-          </ul>
+    <div class="header-wrapper">
+      <h1>県大付属中版 アキネーター</h1>
+    </div>
+
+    <div class="main-wrapper">
+      <div class="bubble">
+        <svg width="401.09" height="223.68">
+          <polygon
+            points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
+          ></polygon>
+        </svg>
+        <div class="question-text">
+          <p id="question-number">Q1</p>
+          <p id="question-text">{{ question_statement }}</p>
         </div>
       </div>
+      <div class="images">
+        <img src="../static/images/gennbaneko0.png" width="20%" height="20%" />
+      </div>
+      <div class="answer-table">
+        <ul>
+          <li>
+            <a class="select" onclick="clickSelect(0)">はい</a>
+          </li>
+          <li>
+            <a class="select" onclick="clickSelect(1)">いいえ</a>
+          </li>
+          <li>
+            <a class="select" onclick="clickSelect(2)">分からない</a>
+          </li>
+        </ul>
+      </div>
+      <a class="btn solid" onclick="reset()">リセット</a>
+      <a class="btn solid" onclick="back()">一つ戻る</a>
     </div>
-    <button onclick="reset()">リセット</button>
+
+    <div class="fotter-wrapper">
+      <footer class="footer">
+        <div class="music">
+          <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay >
+            あなたのブラウザーは<code>audio</code> 要素をサポートしていません。
+          </audio>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
+
+<style>
+  main {
+    padding-left: 50px;
+  }
+  .header {
+    padding-left: 5%;
+  }
+  .select:hover {
+    width: fit-content;
+    width: -moz-fit-content;
+    padding: 15px;
+    margin: 2rem auto;
+    background-color: lightblue;
+    color: darkblue;
+    transition: 0.4s;
+  }
+  .select:hover {
+    background-color: rgb(12, 99, 133);
+  }
+  #question-text {
+    margin: 2em;
+    font-size: 1.5em;
+  }
+  .bubble p {
+    top: 20px;
+    left: 64%;
+  }
+  .bubble svg {
+    left: 60%;
+  }
+</style>
 
 <script language="javascript" type="text/javascript">
   const base_url = "http://127.0.0.1:8000";
 
-  // 選択肢選択時
-  async function click_select(select_id) {
-    const url = base_url + "/request"; // URL
-    var json_def = { status: 0, Q: { ans: select_id } }; // 送信用辞書
-    await post(url, json_def); // サーバーへ回答を送信
-    await get(url); // サーバーから質問を受信
-    await set_image(); // 画像の変更
-  }
-
   // 画面表示系
   q_number = 1;
-  function set_question(txt) {
+  function setQuestion(txt) {
     q_number += 1;
-    let question_number = document.getElementById("question_number");
-    question_number.innerText = `Q${q_number}`; // 第何問目
-    document.getElementById("question_text").innerText = txt; // 質問文
+    document.getElementById("question-number").innerText = `Q${q_number}`; // 第何問目
+    document.getElementById("question-text").innerText = txt; // 質問文
     console.log(`setQ-${txt}`);
   }
 
   // 画像変更
-  async function set_image() {
+  async function setImage() {
     var random = Math.floor(Math.random() * 3);
     document.getElementById(
       "image"
-    ).src = `static/images/gennbaneko${random}.png`;
+    ).src = `../static/images/gennbaneko${random}.png`;
   }
-
-  let request = new XMLHttpRequest();
-  request.onreadystatechange = function () {
-    if ((request.readyState == 4) & (request.status == 200)) {
-      var obj = JSON.parse(request.responseText);
-      // console.log(`${obj.statement}`)
-      set_question(obj.statement);
-      console.log("result_status : ", obj.result_status);
-
-      if (obj.result_status == 1) {
-        window.location.href = "/result";
-      } else if (obj.result_status == 2) {
-        window.location.href = "/result";
-      }
-    }
-  };
 
   // 読み取り
   async function get(url) {
+    let request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+      if ((request.readyState == 4) & (request.status == 200)) {
+        var obj = JSON.parse(request.responseText);
+        // console.log(`${obj.statement}`)
+        setQuestion(obj.statement);
+        console.log("result_status : ", obj.result_status);
+
+        if (obj.result_status == 1) {
+          window.location.href = "/result";
+        } else if (obj.result_status == 2) {
+          window.location.href = "/result";
+        }
+      }
+    };
     request.open("GET", url, true);
-    request.send();
+    await request.send();
   }
 
   // 書き込み
   async function post(url, data) {
+    let request = new XMLHttpRequest();
     request.open("POST", url, true);
     request.setRequestHeader("Content-Type", "application/json"); // ヘッダー情報
     var post_json = JSON.stringify(data);
     await request.send(post_json);
+  }
+
+  // 選択肢選択時
+  async function clickSelect(select_id) {
+    const url = base_url + "/request"; // URL
+    var json_def = { status: 0, Q: { ans: select_id } }; // 送信用辞書
+    await post(url, json_def); // サーバーへ回答を送信
+    await get(url); // サーバーから質問を受信
+    await setImage(); // 画像の変更
+  }
+
+  // 一つ戻る
+  async function back() {
+    // リセット用の関数
+    q_number -= 1;
+    const url = base_url + "/back";
+    await get(url); // サーバーから質問を受信
+    await setImage(); // 画像の変更
+    console.log("一つ戻る");
   }
 
   // リセット
@@ -113,8 +161,24 @@
     // リセット用の関数
     q_number = 0;
     const url = base_url + "/reset";
-    request.open("GET", url, true);
-    request.send();
+    await get(url);
     console.log("リセット");
   }
+
+  const music_volume = document.getElementById("volume");
+
+  // inputイベント時に値をセットする関数
+  const changeVolume = (e) => {
+    document.getElementById("music-volume").innerText = e.target.value;
+    document.getElementById("audio").volume = music_volume.value / 100;
+    // console.log(music_volume.value / 100);
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    // 変更に合わせてイベントを発火する
+    music_volume.addEventListener("change", changeVolume);
+    // ページ読み込み時の値をセット
+    document.getElementById("music-volume").innerText = music_volume.value;
+    setImage();
+  });
 </script>

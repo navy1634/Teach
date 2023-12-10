@@ -18,14 +18,14 @@
             points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
           ></polygon>
         </svg>
-        <p>よぉし！, また正解！！<br />魔人は何でもお見通しだ !</p>
+        <p class="result">{{ result_sentence }}</p>
       </div>
       <div class="images">
         <img src="../static/images/gennbaneko0.png" width="20%" height="20%" />
       </div>
       <div class="result-button">
-        <a class="btn solid" href="/">タイトルへ</a>
-        <a class="btn solid" href="/akinator">もう一度</a>
+        <a class="btn solid" href="/result">はい</a>
+        <a class="btn solid" href="/akinator">いいえ</a>
       </div>
     </div>
 
@@ -43,14 +43,17 @@
 </html>
 
 <style>
+  main {
+    text-align: center;
+  }
   .heading {
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 5em;
   }
-  .images {
-    position: relative;
-    text-align: center;
-    top: 15%;
+  .result {
+    margin: 2em;
+    padding: 2em;
+    font-size: 150%;
   }
   .result-button {
     position: relative;
@@ -65,3 +68,5 @@
     left: 60%;
   }
 </style>
+
+<script></script>

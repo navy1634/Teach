@@ -1,17 +1,102 @@
-.select:hover {
-    width: fit-content;
-    width: -moz-fit-content;
-    padding: 15px;
-    margin: 2rem auto;
-    background-color: lightblue;
-    color: darkblue;
-    transition: 0.4s;
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 120%;
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+.header-wrapper {
+  margin: 0;
+  padding: 0;
+  padding-bottom: -15px;
+}
+.header {
+  padding-left: 5%;
+}
+.heading {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 3em;
+  text-align: center;
+}
+.main-wrapper {
+  position: relative;
+  text-align: center;
+  min-height: 70vh;
+  margin: 0;
+  padding: 0%;
+}
+.solid {
+  border: 2px solid #b84c00;
+  display: inline-block;
+}
+.btn {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  /* display: inline-block; */
+  padding: 1rem 4rem;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #000000;
+  border-radius: 0.5rem;
+}
+.btn:hover {
+  background-color: #693211;
+  color: #ffffff;
+}
+.bubble {
+  position: relative;
+  box-sizing: border-box;
+}
+.bubble p {
+  position: absolute;
+  text-align: center;
+  overflow-wrap: normal;
+  font-size: 20px;
+}
+.bubble svg {
+  position: absolute;
+  -webkit-filter: drop-shadow(-6px -5px 20px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(-6px -5px 20px rgba(94, 94, 94, 0.4));
+}
+.bubble svg polygon {
+  fill: rgba(172, 225, 250, 0.7);
+}
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: #44aa33;
+}
+.music {
+  text-align: right;
+}
+.audio-button {
+  width: 16px;
+  height: 16px;
+  background: url("../images/icon_pause.png");
+}
+.play .audio-button {
+  background-image: url("../images/icon_play.png");
 }
 
-.select:hover {
-background-color: rgb(12, 99, 133);
-}
-
-.horizon {
-display: flex;
-}

@@ -2,14 +2,74 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Play a Game !</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" type="text/css" media="screen" href="static/css/style.css" />
-    <!-- <script src="main.js"></script> -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="../static/css/style.css"
+    />
   </head>
   <body>
-    <h1>県大付属中生版 アキネーター</h1>
-    <a href="/akinator">開始</a>
+    <div class="header-wrapper">
+      <header>
+        <p class="heading">県大付属中版 アキネーター</p>
+      </header>
+    </div>
+
+    <div class="main-wrapper">
+      <div class="bubble">
+        <svg width="210" height="164.25">
+          <polygon
+            points="0,0 180,0 180,20 210,20 195,35 189,42 183,50 181,55 180,60 180,164.25 0,164.25"
+          ></polygon>
+        </svg>
+        <p>
+          やあ、私は<br />
+          アキネイター
+        </p>
+      </div>
+      <div class="title-image">
+        <img src="../static/images/gennbaneko0.png" width="20%" height="20%" />
+      </div>
+      <div class="start-button">
+        <a class="btn solid" href="/akinator">プレイする</a>
+      </div>
+    </div>
+
+    <div class="fotter-wrapper">
+      <footer class="footer">
+        <div class="music">
+          <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay >
+            あなたのブラウザーは<code>audio</code>
+            要素をサポートしていません。
+          </audio>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
+
+<style>
+  .title-image {
+    position: relative;
+    text-align: center;
+    top: 15%;
+  }
+  .start-button {
+    position: relative;
+    text-align: center;
+    bottom: 0;
+  }
+  .bubble {
+    left: 100px;
+  }
+  .bubble p {
+    top: 20px;
+    left: 22%;
+  }
+  .bubble svg {
+    left: 20%;
+  }
+</style>
