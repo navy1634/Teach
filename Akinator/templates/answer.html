@@ -12,29 +12,47 @@
     </div>
 
     <div class="main-wrapper">
-      <div class="bubble">
-        <svg width="401.09" height="223.68">
-          <polygon
-            points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
-          ></polygon>
-        </svg>
-        <p class="result">{{ result_sentence }}</p>
-      </div>
-      <div class="images">
-        <img src="../static/images/gennbaneko0.png" width="20%" height="20%" />
-      </div>
-      <div class="result-button">
-        <a class="btn solid" href="/result">はい</a>
-        <a class="btn solid" href="/akinator">いいえ</a>
-      </div>
+      <main>
+        <div class="main">
+          <div class="akinator-home">
+            <div class="home">
+              <div class="images">
+                <img src="../static/images/gennbaneko0.png" />
+              </div>
+
+              <div class="question-bubble">
+                <div class="obj">
+                  <div class="bubble-obj">
+                    <div class="bubble-home">
+                      <div class="bubble">
+                        <svg width="401.09" height="223.68">
+                          <polygon
+                            points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
+                          ></polygon>
+                        </svg>
+                      </div>
+                      <div class="question-text">
+                        <p class="result">{{ result_sentence }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="buttons">
+            <a class="btn solid" href="/">タイトルへ</a>
+            <a class="btn solid" href="/akinator">もう一度</a>
+          </div>
+        </div>
+      </main>
     </div>
 
     <div class="fotter-wrapper">
       <footer class="footer">
         <div class="music">
           <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay >
-            あなたのブラウザーは<code>audio</code>
-            要素をサポートしていません。
+            あなたのブラウザーは<code>audio</code> 要素をサポートしていません。
           </audio>
         </div>
       </footer>
@@ -45,28 +63,79 @@
 <style>
   main {
     text-align: center;
+    padding-left: 50px;
   }
-  .heading {
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 5em;
+  .main {
+    position: relative;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
   }
-  .result {
-    margin: 2em;
-    padding: 2em;
-    font-size: 150%;
+  .header {
+    padding-left: 5%;
   }
-  .result-button {
+  .akinator-home {
+    position: absolute;
+  }
+  .home {
     position: relative;
     text-align: center;
-    bottom: 0;
   }
-  .bubble p {
-    top: 20px;
-    left: 64%;
+  .images {
+    position: absolute;
+  }
+  .images img {
+    width: 300px;
+    height: 300px;
+  }
+  .question-bubble {
+    position: absolute;
+    left: 300px;
+  }
+  .result {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+    top: 30px;
+    left: 60px;
+  }
+  .obj {
+    position: relative;
+  }
+  .answer-table {
+    position: relative;
+    width: 300px;
+    top: 300px;
+    border: #4e7bcc 1px solid;
+  }
+  .bubble-obj {
+    position: absolute;
+  }
+  .bubble-home {
+    position: relative;
+  }
+  .bubble {
+    position: absolute;
   }
   .bubble svg {
     left: 60%;
   }
+  .select:hover {
+    width: fit-content;
+    width: -moz-fit-content;
+    /* padding: 15px; */
+    margin: 2rem auto;
+    background-color: lightblue;
+    color: darkblue;
+    transition: 0.4s;
+  }
+  .select:hover {
+    background-color: rgb(12, 99, 133);
+  }
+  .buttons {
+    text-align: center;
+    position: absolute;
+    top: 500px;
+  }
 </style>
-
-<script></script>

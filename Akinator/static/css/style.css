@@ -13,6 +13,8 @@ html {
 body {
   margin: 0;
   padding: 0;
+  /* background-image: url("../images/gennbaneko0.png");
+  background-size: cover; */
 }
 .header-wrapper {
   margin: 0;
@@ -28,7 +30,6 @@ body {
   text-align: center;
 }
 .main-wrapper {
-  position: relative;
   text-align: center;
   min-height: 70vh;
   margin: 0;
@@ -64,17 +65,15 @@ body {
   color: #ffffff;
 }
 .bubble {
-  position: relative;
   box-sizing: border-box;
 }
 .bubble p {
-  position: absolute;
   text-align: center;
   overflow-wrap: normal;
   font-size: 20px;
 }
 .bubble svg {
-  position: absolute;
+  /* position: absolute; */
   -webkit-filter: drop-shadow(-6px -5px 20px rgba(0, 0, 0, 0.4));
   filter: drop-shadow(-6px -5px 20px rgba(94, 94, 94, 0.4));
 }

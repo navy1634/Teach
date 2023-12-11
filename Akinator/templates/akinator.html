@@ -8,39 +8,51 @@
   </head>
   <body>
     <div class="header-wrapper">
-      <h1>県大付属中版 アキネーター</h1>
+      <h1 class="header">県大付属中版 アキネーター</h1>
     </div>
 
     <div class="main-wrapper">
-      <div class="bubble">
-        <svg width="401.09" height="223.68">
-          <polygon
-            points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
-          ></polygon>
-        </svg>
-        <div class="question-text">
-          <p id="question-number">Q1</p>
-          <p id="question-text">{{ question_statement }}</p>
+      <main>
+        <div class="main">
+          <div class="akinator-home">
+            <div class="home">
+              <div class="images">
+                <img src="../static/images/gennbaneko0.png" />
+              </div>
+
+              <div class="question-bubble">
+                <div class="obj">
+                  <div class="bubble-obj">
+                    <div class="bubble-home">
+                      <div class="bubble">
+                        <svg width="401.09" height="223.68">
+                          <polygon
+                            points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
+                          ></polygon>
+                        </svg>
+                      </div>
+                      <div class="question-text">
+                        <p id="question-number">Q1</p>
+                        <p id="question-text">{{ question_statement }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="answer-table">
+                    <p class="select" onclick="clickSelect(0)">はい</p>
+                    <p class="select" onclick="clickSelect(1)">いいえ</p>
+                    <p class="select" onclick="clickSelect(2)">分からない</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="buttons">
+            <a class="btn solid" onclick="reset()">リセット</a>
+            <a class="btn solid" onclick="back()">一つ戻る</a>
+          </div>
         </div>
-      </div>
-      <div class="images">
-        <img src="../static/images/gennbaneko0.png" width="20%" height="20%" />
-      </div>
-      <div class="answer-table">
-        <ul>
-          <li>
-            <a class="select" onclick="clickSelect(0)">はい</a>
-          </li>
-          <li>
-            <a class="select" onclick="clickSelect(1)">いいえ</a>
-          </li>
-          <li>
-            <a class="select" onclick="clickSelect(2)">分からない</a>
-          </li>
-        </ul>
-      </div>
-      <a class="btn solid" onclick="reset()">リセット</a>
-      <a class="btn solid" onclick="back()">一つ戻る</a>
+      </main>
     </div>
 
     <div class="fotter-wrapper">
@@ -57,33 +69,95 @@
 
 <style>
   main {
+    text-align: center;
     padding-left: 50px;
+  }
+  .main {
+    position: relative;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
   }
   .header {
     padding-left: 5%;
   }
-  .select:hover {
-    width: fit-content;
-    width: -moz-fit-content;
-    padding: 15px;
-    margin: 2rem auto;
-    background-color: lightblue;
-    color: darkblue;
-    transition: 0.4s;
+  .akinator-home {
+    position: absolute;
   }
-  .select:hover {
-    background-color: rgb(12, 99, 133);
+  .home {
+    position: relative;
+    text-align: center;
+  }
+  .images {
+    position: absolute;
+  }
+  .images img {
+    width: 300px;
+    height: 300px;
+  }
+  .question-bubble {
+    position: absolute;
+    left: 300px;
   }
   #question-text {
-    margin: 2em;
+    position: absolute;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
     font-size: 1.5em;
+    top: 30px;
+    left: 60px;
+    max-width: 400px;
   }
-  .bubble p {
-    top: 20px;
-    left: 64%;
+  .obj {
+    position: relative;
+  }
+  .answer-table {
+    position: relative;
+    width: 300px;
+    top: 300px;
+    border: #4e7bcc 1px solid;
+  }
+  .bubble-obj {
+    position: absolute;
+  }
+  .bubble-home {
+    position: relative;
+  }
+  .bubble {
+    position: absolute;
   }
   .bubble svg {
     left: 60%;
+  }
+  .select:hover {
+    width: fit-content;
+    width: -moz-fit-content;
+    margin: 1rem auto;
+    padding: 0rem 4rem;
+    background-color: lightblue;
+    color: #000000;
+    /* font-weight: 700; */
+    /* line-height: 1.5; */
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    transition: 0.4s;
+    -webkit-transition: all 0.3s;
+    text-decoration: none;
+  }
+  .select:hover {
+    background-color: #693211;
+    color: #ffffff;
+  }
+  .buttons {
+    text-align: center;
+    position: absolute;
+    top: 500px;
   }
 </style>
 
