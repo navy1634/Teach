@@ -44,7 +44,6 @@ body {
   font-weight: 700;
   line-height: 1.5;
   position: relative;
-  /* display: inline-block; */
   padding: 1rem 4rem;
   cursor: pointer;
   user-select: none;
@@ -73,7 +72,6 @@ body {
   font-size: 20px;
 }
 .bubble svg {
-  /* position: absolute; */
   -webkit-filter: drop-shadow(-6px -5px 20px rgba(0, 0, 0, 0.4));
   filter: drop-shadow(-6px -5px 20px rgba(94, 94, 94, 0.4));
 }
@@ -85,7 +83,6 @@ footer {
   left: 0;
   bottom: 0;
   width: 100%;
-  background: #44aa33;
 }
 .music {
   text-align: right;

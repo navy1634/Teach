@@ -31,9 +31,11 @@
                           ></polygon>
                         </svg>
                       </div>
-                      <div class="question-text">
-                        <p id="question-number">Q1</p>
-                        <p id="question-text">{{ question_statement }}</p>
+                      <div class="questions">
+                        <div class="question-text">
+                          <p id="question-number">Q1</p>
+                          <p id="question-text">{{ question_statement }}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -58,7 +60,7 @@
     <div class="fotter-wrapper">
       <footer class="footer">
         <div class="music">
-          <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay >
+          <audio id="audio" src="../static/music/BGM.mp3.mp3" loop controls autoplay >
             あなたのブラウザーは<code>audio</code> 要素をサポートしていません。
           </audio>
         </div>
@@ -99,23 +101,38 @@
     position: absolute;
     left: 300px;
   }
+  .questions {
+    position: absolute;
+  }
+  .question-text {
+    position: relative;
+    white-space: nowrap;
+  }
+  #question-number {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 10px;
+    left: 40px;
+    font-size: 1.5em;
+  }
   #question-text {
     position: absolute;
-    white-space: nowrap;
     margin: 0;
     padding: 0;
     font-size: 1.5em;
-    top: 30px;
+    top: 50px;
     left: 60px;
-    max-width: 400px;
+    max-width: 300px;
   }
   .obj {
     position: relative;
   }
   .answer-table {
     position: relative;
-    width: 300px;
-    top: 300px;
+    width: 350px;
+    top: 250px;
+    left: 50px;
     border: #4e7bcc 1px solid;
   }
   .bubble-obj {
@@ -157,7 +174,7 @@
   .buttons {
     text-align: center;
     position: absolute;
-    top: 500px;
+    top: 450px;
   }
 </style>
 
@@ -189,10 +206,11 @@
         var obj = JSON.parse(request.responseText);
         // console.log(`${obj.statement}`)
         setQuestion(obj.statement);
+        obj.len
         console.log("result_status : ", obj.result_status);
 
         if (obj.result_status == 1) {
-          window.location.href = "/result";
+          window.location.href = "/answer";
         } else if (obj.result_status == 2) {
           window.location.href = "/result";
         }

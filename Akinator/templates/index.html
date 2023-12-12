@@ -4,12 +4,7 @@
     <meta charset="utf-8" />
     <title>Play a Game !</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="../static/css/style.css"
-    />
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/style.css" />
   </head>
   <body>
     <div class="header-wrapper">
@@ -36,12 +31,12 @@
                           points="0,0 180,0 180,20 210,20 195,35 189,42 183,50 181,55 180,60 180,164.25 0,164.25"
                         ></polygon>
                       </svg>
-                    </div>
-                    <div class="question-text">
-                      <p>
-                        やあ、私は<br />
-                        アキネイター
-                      </p>
+                      <div class="question-text">
+                        <p>
+                          やあ、私は<br />
+                          アキネイター
+                        </p>
+                      </div>
                     </div>
                     <div class="bubble bubble-right">
                       <svg width="401.09" height="223.68">
@@ -49,6 +44,11 @@
                           points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
                         ></polygon>
                       </svg>
+                      <div class="question-text">
+                        <p>
+                          サンプル
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -65,13 +65,7 @@
     <div class="fotter-wrapper">
       <footer class="footer">
         <div class="music">
-          <audio
-            id="audio"
-            src="../static/music/sample.mp3"
-            loop
-            controls
-            autoplay
-          >
+          <audio id="audio" src="../static/music/BGM.mp3" loop controls autoplay >
             あなたのブラウザーは<code>audio</code>
             要素をサポートしていません。
           </audio>
@@ -84,16 +78,13 @@
 <style>
   .title-image {
     position: relative;
-    text-align: center;
     top: 15%;
   }
   .start-button {
     position: relative;
-    text-align: center;
     bottom: 0;
   }
   main {
-    text-align: center;
     padding-left: 50px;
   }
   .main {
@@ -114,7 +105,7 @@
   }
   .images {
     position: absolute;
-    left: 200px;
+    left: 230px;
   }
   .images img {
     width: 300px;
@@ -122,15 +113,6 @@
   }
   .question-bubble {
     position: absolute;
-  }
-  .question-text {
-    position: absolute;
-    white-space: nowrap;
-    margin: 0;
-    padding: 0;
-    font-size: 1.5em;
-    top: 15px;
-    left: 10px;
   }
   .obj {
     position: relative;
@@ -147,16 +129,37 @@
   .bubble-home {
     position: relative;
   }
+  .bubble-right {
+    left: 500px;
+  }
+  .question-text {
+    position: absolute;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+  }
+  .bubble-left .question-text {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .bubble-right .question-text {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .bubble-left .question-text p {
+    font-size: 1.5em;
+  }
+  .bubble-right .question-text p {
+    font-size: 1.5em;
+  }
   .bubble {
     position: absolute;
-  }
-  .bubble svg {
-    left: 60%;
   }
   .select:hover {
     width: fit-content;
     width: -moz-fit-content;
-    /* padding: 15px; */
     margin: 2rem auto;
     background-color: lightblue;
     color: darkblue;
@@ -166,9 +169,8 @@
     background-color: rgb(12, 99, 133);
   }
   .buttons {
-    /* text-align: center; */
     position: absolute;
-    top: 400px;
+    top: 350px;
     left: 200px;
   }
 </style>
