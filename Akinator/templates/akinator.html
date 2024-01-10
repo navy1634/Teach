@@ -4,12 +4,7 @@
     <meta charset="utf-8" />
     <title>Play a Game !</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="../static/css/style.css"
-    />
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/style.css" />
   </head>
   <body>
     <div class="main-wrapper">
@@ -48,16 +43,10 @@
     <div class="fotter-wrapper">
       <footer class="footer">
         <div class="meter-bar">
-          <meter class="meter" min="0" max="100">50%</meter>
+          <meter id="meter" value="100" min="0" max="100" low="20" high="100"></meter>
         </div>
         <div class="music">
-          <audio
-            id="audio"
-            src="../static/music/sample.mp3"
-            loop
-            controls
-            autoplay
-          >
+          <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay >
             あなたのブラウザーは<code>audio</code> 要素をサポートしていません。
           </audio>
         </div>
@@ -111,7 +100,7 @@
   .meter-bar {
     text-align: center;
   }
-  .meter {
+  #meter {
     width: 80%;
     height: 100px;
   }
@@ -122,10 +111,11 @@
 
   // 画面表示系
   q_number = 1;
-  function setQuestion(txt) {
+  function setQuestion(txt, value) {
     q_number += 1;
     document.getElementById("question-number").innerText = `Q${q_number}`; // 第何問目
     document.getElementById("question-text").innerText = txt; // 質問文
+    document.getElementById("meter").value = value; // メーター
     console.log(`setQ-${txt}`);
   }
 
@@ -144,7 +134,7 @@
       if ((request.readyState == 4) & (request.status == 200)) {
         var obj = JSON.parse(request.responseText);
         // console.log(`${obj.statement}`)
-        setQuestion(obj.statement);
+        setQuestion(obj.statement, obj.meter_value);
         console.log("result_status : ", obj.result_status);
 
         if (obj.result_status == 1) {
