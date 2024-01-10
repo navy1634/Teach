@@ -5,87 +5,46 @@
   box-sizing: inherit;
 }
 html {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
   font-size: 120%;
-  height: 100%;
-}
-body {
-  margin: 0;
-  padding: 0;
-  /* background-image: url("../images/gennbaneko0.png");
-  background-size: cover; */
-}
-.header-wrapper {
-  margin: 0;
-  padding: 0;
-  padding-bottom: -15px;
 }
 .header {
   padding-left: 5%;
-}
-.heading {
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 3em;
-  text-align: center;
-}
-.main-wrapper {
-  text-align: center;
-  min-height: 70vh;
-  margin: 0;
-  padding: 0%;
+  color: #ffffff;
 }
 .solid {
-  border: 2px solid #b84c00;
+  border: 2px solid #bf9000;
   display: inline-block;
 }
 .btn {
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 1.5;
-  position: relative;
-  /* display: inline-block; */
-  padding: 1rem 4rem;
+  width: 15rem;
+  height: 5rem;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #ffd966;
+  color: #000000;
+  border-radius: 0.5rem;
   cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
   user-select: none;
+  text-decoration: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  letter-spacing: 0.1em;
-  color: #000000;
-  border-radius: 0.5rem;
 }
 .btn:hover {
-  background-color: #693211;
-  color: #ffffff;
-}
-.bubble {
-  box-sizing: border-box;
-}
-.bubble p {
-  text-align: center;
-  overflow-wrap: normal;
-  font-size: 20px;
-}
-.bubble svg {
-  /* position: absolute; */
-  -webkit-filter: drop-shadow(-6px -5px 20px rgba(0, 0, 0, 0.4));
-  filter: drop-shadow(-6px -5px 20px rgba(94, 94, 94, 0.4));
-}
-.bubble svg polygon {
-  fill: rgba(172, 225, 250, 0.7);
+  background-color: #ffbf00;
+  color: #000000;
 }
 footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  background: #44aa33;
 }
 .music {
   text-align: right;

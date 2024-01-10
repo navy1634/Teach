@@ -4,7 +4,12 @@
     <meta charset="utf-8" />
     <title>Play a Game !</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="../static/css/style.css"
+    />
   </head>
   <body>
     <div class="header-wrapper">
@@ -12,46 +17,42 @@
     </div>
 
     <div class="main-wrapper">
-      <main>
-        <div class="main">
-          <div class="akinator-home">
-            <div class="home">
-              <div class="images">
-                <img src="../static/images/gennbaneko0.png" />
-              </div>
+      <div class="main">
+        <div class="home">
+          <div class="images">
+            <img src="../static/images/teacher3.png" />
+          </div>
 
-              <div class="question-bubble">
-                <div class="obj">
-                  <div class="bubble-obj">
-                    <div class="bubble-home">
-                      <div class="bubble">
-                        <svg width="401.09" height="223.68">
-                          <polygon
-                            points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,223.688 401.094,223.688 401.094,0"
-                          ></polygon>
-                        </svg>
-                      </div>
-                      <div class="question-text">
-                        <p class="result">{{ result_sentence }}</p>
-                      </div>
-                    </div>
-                  </div>
+          <div class="questions">
+            <div class="bubble-obj">
+              <div class="bubble-home">
+                <div class="bubble">
+                  <img src="../static/images/bubble.png" />
                 </div>
+                <div class="question-text">
+                  <p class="result">{{ result_sentence }}</p>
+                </div>
+              </div>
+              <div class="buttons">
+                <a class="btn solid" href="/result">はい</a>
+                <a class="btn solid" href="/akinator">いいえ</a>
               </div>
             </div>
           </div>
-          <div class="buttons">
-            <a class="btn solid" href="/">タイトルへ</a>
-            <a class="btn solid" href="/akinator">もう一度</a>
-          </div>
         </div>
-      </main>
+      </div>
     </div>
 
     <div class="fotter-wrapper">
       <footer class="footer">
         <div class="music">
-          <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay >
+          <audio
+            id="audio"
+            src="../static/music/sample.mp3"
+            loop
+            controls
+            autoplay
+          >
             あなたのブラウザーは<code>audio</code> 要素をサポートしていません。
           </audio>
         </div>
@@ -61,81 +62,40 @@
 </html>
 
 <style>
-  main {
-    text-align: center;
-    padding-left: 50px;
-  }
-  .main {
-    position: relative;
-    top: 50%;
-    left: 75%;
-    transform: translate(-50%, -50%);
-  }
-  .header {
-    padding-left: 5%;
-  }
-  .akinator-home {
-    position: absolute;
+  body {
+    background-image: url("../static/images/universe.jpg");
+    background-size: cover;
   }
   .home {
-    position: relative;
-    text-align: center;
+    width: auto;
   }
   .images {
     position: absolute;
+    top: 200px;
+    left: 20%;
   }
   .images img {
-    width: 300px;
-    height: 300px;
-  }
-  .question-bubble {
-    position: absolute;
-    left: 300px;
-  }
-  .result {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    font-size: 1.5em;
-    top: 30px;
-    left: 60px;
-  }
-  .obj {
-    position: relative;
-  }
-  .answer-table {
-    position: relative;
-    width: 300px;
-    top: 300px;
-    border: #4e7bcc 1px solid;
+    width: 267px;
+    height: 679px;
   }
   .bubble-obj {
-    position: absolute;
-  }
-  .bubble-home {
     position: relative;
   }
   .bubble {
     position: absolute;
-  }
-  .bubble svg {
+    top: 50px;
     left: 60%;
+    transform: translate(-50%, 20%);
   }
-  .select:hover {
-    width: fit-content;
-    width: -moz-fit-content;
-    /* padding: 15px; */
-    margin: 2rem auto;
-    background-color: lightblue;
-    color: darkblue;
-    transition: 0.4s;
-  }
-  .select:hover {
-    background-color: rgb(12, 99, 133);
+  .question-text {
+    position: absolute;
+    font-size: 40px;
+    top: 150px;
+    left: 50%;
   }
   .buttons {
-    text-align: center;
     position: absolute;
     top: 500px;
+    left: 50%;
   }
 </style>

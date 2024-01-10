@@ -60,6 +60,7 @@ def main() -> str:
     user_dict["survey"] = survey_org.copy()  # アンケートデータ
     user_dict["question_priority"] = question_priority_dict.copy()  # 質問の一覧
     user_dict["sentence"] = ""
+    user_dict["question_list"] = list()
 
     user_id = session["user_id"]
     all_users_dict[user_id] = user_dict
@@ -117,7 +118,7 @@ def post_item() -> dict:
 
     # 結果の保存
     all_users_dict[user_id]["survey"] = df_survey
-
+    all_users_dict[user_id]["question_list"].append([content, choice_target, ans])
     return {}
 
 
@@ -192,6 +193,44 @@ def get_item():
     return {"result_status": session_status, "statement": statement}
 
 
+@app.route("/back", methods=["GET"])
+def back() -> dict:
+    # 初期化
+    user_id = session["user_id"]
+    user_dict = all_users_dict[user_id]
+    print("========================================")
+
+    # 質問文の選択
+    if len(user_dict["question_list"]) <= 2:
+        return {"result_status": 0}
+
+    session_status = 0
+    session["status"] = session_status
+
+    content, choice_target, ans = user_dict["question_list"][-2]
+    statement = question_data[content]["statement"]  # 質問文
+    print("質問対象 : ", content)
+    print("回答対象 : ", choice_target)
+    print("YES(0)/NO(1) : ", ans)
+
+    df = survey_org.copy()
+    for _content, _choice_target, _ans in user_dict["question_list"][:-1]:
+        if _ans == 0:
+            df = df[df[_content] == _choice_target]
+        else:
+            df = df[df[_content] != _choice_target]
+
+    # 情報の保存
+    user_dict["survey"] = df
+    session["content"] = content
+    session["choice_target"] = choice_target
+    all_users_dict[user_id] = user_dict
+
+    if "{0}" in statement:
+        statement = statement.format(choice_target)
+
+    return {"result_status": 0, "statement": statement}
+
 @app.route("/reset", methods=["GET"])
 def reset() -> dict:
     # 初期化
@@ -219,6 +258,11 @@ def reset() -> dict:
 
     return {"result_status": 0, "statement": statement}
 
+@app.route("/answer", methods=["GET"])
+def answer():
+    user_id = session["user_id"]
+    result_sentence = all_users_dict[user_id]["sentence"]
+    return render_template("answer.html", static_url_path="/static", result_sentence=result_sentence)
 
 @app.route("/result", methods=["GET"])
 def result():
