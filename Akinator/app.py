@@ -5,6 +5,7 @@ import json
 import os
 import random
 import string
+from copy import deepcopy
 from datetime import timedelta
 
 import pandas as pd
@@ -13,6 +14,9 @@ from flask_cors import CORS
 
 # データの初期設定
 DATA_DIR = os.getcwd() + "/data"
+NORMAL = 0
+CAN_FIND = 1
+CANNOT_FIND = 2
 
 # 質問文と選択肢の情報
 with open(DATA_DIR + "/questions.json", "r", encoding="utf-8") as f:
@@ -37,9 +41,6 @@ cors = CORS(app, supports_credentials=True)
 app.secret_key = "".join(random.choices(string.ascii_letters + string.digits, k=24))  # session の暗号、復号に用いる
 app.permanent_session_lifetime = timedelta(minutes=10)  # session の保存時間
 
-NORMAL = 0
-CAN_FIND = 1
-CANNOT_FIND = 2
 
 
 @app.route("/")
@@ -62,8 +63,10 @@ def main() -> str:
     # USER_ID を基に管理する
     user_dict = dict()  # 個人データ保存の辞書
     user_dict["survey"] = survey_org.copy()  # アンケートデータ
-    user_dict["question_priority"] = question_priority_dict.copy()  # 質問の一覧
+    user_dict["question_priority"] = deepcopy(question_priority_dict)  # 質問の一覧
     user_dict["sentence"] = ""
+    user_dict["question_list"] = list()
+    session["count"] = 0
 
     user_id = session["user_id"]
     all_users_dict[user_id] = user_dict
@@ -120,16 +123,28 @@ def post_item() -> dict:
         raise ValueError()
 
     # 結果の保存
-    all_users_dict[user_id]["survey"] = df_survey
+    if len(df_survey) == 0:
+        all_users_dict[user_id]["survey"] = df_survey_def
+    else:
+        all_users_dict[user_id]["survey"] = df_survey
 
+    all_users_dict[user_id]["question_list"].append([content, choice_target, ans])
     return {}
+
+def selection_of_importance(len_df):
+    if len_df > 90:
+        importance = "normal"
+    elif len_df > 6:
+        importance = "important"
+    else:
+        importance = "essential"
+    return importance
 
 
 @app.route("/request", methods=["GET"])
 def get_item():
     user_id = session["user_id"]
     print("-------------------------")
-    # print(request.method, session)
 
     # 条件判断
     df_survey = all_users_dict[user_id]["survey"]
@@ -140,6 +155,7 @@ def get_item():
         result_sentence = "あなたが誰かわかりませんでした……"
         all_users_dict[user_id]["sentence"] = result_sentence
         print(result_sentence)
+        # return url_for("result")
         return {"result_status": session_status, "statement": ""}
 
     elif len(df_survey) == 1:  # 1人に特定できた場合
@@ -149,6 +165,7 @@ def get_item():
         result_sentence = f"""あなたは ”{target_name}” さんですか？"""
         all_users_dict[user_id]["sentence"] = result_sentence
         print(result_sentence)
+        # return url_for("answer")
         return {"result_status": session_status, "statement": ""}
 
     session_status = NORMAL
@@ -160,22 +177,18 @@ def get_item():
     # 質問の重要性を考える
     len_df = len(df_survey)
 
-    if len_df > 90:
-        importance = "normal"
-    elif len_df > 6:
-        importance = "important"
-    else:
-        importance = "essential"
+    importance = selection_of_importance(len_df)
 
     # 重要性別のリストが空なら多い normal から選ぶ
     if len(question_priority[importance]) == 0:
         importance = "normal"
-    elif len(question_priority["normal"]) == 0:
-        importance = "important"
-    elif len(question_priority["important"]) == 0:
-        importance = "essential"
-    elif len(question_priority["essential"]) == 0 and len(question_priority["normal"]) == 0 and len(question_priority["important"]) == 0:
-        return {"result_status": CANNOT_FIND, "statement": "ERROR"}
+
+        if len(question_priority["normal"]) == 0:
+            importance = "important"
+            if len(question_priority["important"]) == 0:
+                importance = "essential"
+                if len(question_priority["essential"]) == 0:
+                    return {"result_status": CANNOT_FIND, "statement": "ERROR"}
 
     while True:
         # 質問対象の選択
@@ -202,9 +215,10 @@ def get_item():
     statement = question_data[content]["statement"]  # 質問文の取得
     if "{0}" in statement:
         statement = statement.format(choice_target)
+    all_users_dict[user_id]["statement"] = statement
     print("質問文 : ", statement)
 
-    return {"result_status": session_status, "statement": statement, "len": len_df}
+    return {"result_status": session_status, "statement": statement, "meter_value": len_df}
 
 
 @app.route("/back", methods=["GET"])
@@ -215,8 +229,9 @@ def back() -> dict:
     print("========================================")
 
     # 質問文の選択
-    if len(user_dict["question_list"]) <= 2:
-        return {"result_status": NORMAL}
+    print("", user_dict["question_list"])
+    if len(user_dict["question_list"]) <= 1:
+        return {"result_status": NORMAL, "statement": all_users_dict[user_id]["statement"], "meter_value": len(all_users_dict[user_id]["survey"])}
 
     session_status = 0
     session["status"] = session_status
@@ -244,7 +259,7 @@ def back() -> dict:
     if "{0}" in statement:
         statement = statement.format(choice_target)
 
-    return {"result_status": NORMAL, "statement": statement}
+    return {"result_status": NORMAL, "statement": statement, "meter_value": len(df)}
 
 
 @app.route("/reset", methods=["GET"])
@@ -253,7 +268,7 @@ def reset() -> dict:
     user_id = session["user_id"]
     user_dict = all_users_dict[user_id]
     user_dict["survey"] = survey_org.copy()
-    user_dict["question_priority"] = question_priority_dict.copy()
+    user_dict["question_priority"] = deepcopy(question_priority_dict)
     user_dict["sentence"] = ""
 
     # 一つ目の質問
@@ -272,7 +287,8 @@ def reset() -> dict:
     if "{0}" in statement:
         statement = statement.format(choice_target)
 
-    return {"result_status": NORMAL, "statement": statement}
+    return {"result_status": NORMAL, "statement": statement, "meter_value": len(survey_org)}
+
 
 @app.route("/answer", methods=["GET"])
 def answer():
@@ -280,17 +296,18 @@ def answer():
     result_sentence = all_users_dict[user_id]["sentence"]
     return render_template("answer.html", static_url_path="/static", result_sentence=result_sentence)
 
+
 @app.route("/result", methods=["GET"])
 def result():
-    if session["status"] == 1:
+    if session["status"] == CAN_FIND:
         result_text = "よぉし！ 正解！！\n魔人は何でもお見通しだ !"
     else:
         user_id = session["user_id"]
         result_text = all_users_dict[user_id]["sentence"]
 
-    return render_template("result.html", static_url_path="/static", result_text=result_text)
+    return render_template("result.html", static_url_path="/static", result_sentence=result_text)
 
 
 if __name__ == "__main__":
     # サーバの実行
-    app.run(host="127.0.0.1", port=8000, debug=True)
+    app.run(host="127.0.0.1", port=8000)
