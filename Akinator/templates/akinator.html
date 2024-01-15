@@ -8,23 +8,27 @@
       rel="stylesheet"
       type="text/css"
       media="screen"
-      href="static/css/style.css"
+      href="../static/css/style.css"
     />
   </head>
   <body>
+    <div class="header-wrapper">
+      <h1 class="header">県大付属中版 アキネーター</h1>
+    </div>
+
     <div class="main-wrapper">
       <div class="main">
         <div class="akinator-home">
           <div class="home">
             <div class="images">
-              <img src="static/images/teacher2.png" />
+              <img src="../static/images/teacher2.png" />
             </div>
 
             <div class="questions">
               <div class="bubble-home">
                 <div class="bubble-obj">
                   <div class="bubble">
-                    <img src="static/images/bubble1.png" />
+                    <img src="../static/images/bubble1.png" />
                   </div>
                   <div class="question-text">
                     <p id="question-number">Q1</p>
@@ -51,13 +55,7 @@
           <meter id="meter" value="182" min="0" max="182" low="50"></meter>
         </div>
         <div class="music">
-          <audio
-            id="audio"
-            src="static/music/sample.mp3"
-            loop
-            controls
-            autoplay
-          >
+          <audio id="audio" src="../static/music/sample.mp3" loop controls autoplay>
             あなたのブラウザーは<code>audio</code> 要素をサポートしていません。
           </audio>
         </div>
@@ -71,7 +69,7 @@
     text-align: center;
   }
   body {
-    background-image: url("static/images/universe.jpg");
+    background-image: url("../static/images/universe.jpg");
     background-size: cover;
   }
   .images {
@@ -88,9 +86,13 @@
   }
   .bubble {
     position: absolute;
-    top: 200px;
+    top: 100px;
     left: 50%;
     transform: translate(-50%, 20%);
+  }
+  .bubble img {
+    width: 1220px;
+    height: 250px;
   }
   .question-text {
     font-size: 40px;
@@ -98,30 +100,37 @@
   #question-number {
     position: absolute;
     font-size: 40px;
-    top: 420px;
-    left: 20%;
+    top: 250px;
+    left: 15%;
   }
   #question-text {
     position: absolute;
     font-size: 40px;
-    top: 450px;
-    left: 25%;
+    top: 260px;
+    left: 20%;
   }
   .question-text p {
     float: left;
   }
   .buttons {
     position: absolute;
-    top: 650px;
+    width: 50rem;
+    top: 450px;
     left: 50%;
     transform: translate(-50%, 0%);
+  }
+  .btn {
+    font-size: 1.8rem;
+    font-weight: 700;
+    width: 15rem;
+    height: 4rem;
   }
   .meter-bar {
     text-align: center;
   }
   #meter {
     width: 80%;
-    height: 100px;
+    height: 75px;
   }
 </style>
 
